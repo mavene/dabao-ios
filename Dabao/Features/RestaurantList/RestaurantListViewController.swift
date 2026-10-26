@@ -9,6 +9,17 @@ final class RestaurantListViewController: UIViewController {
     private let service: RestaurantServicing
     private var restaurants: [Restaurant] = []
 
+    private nonisolated enum Section: Hashable, Sendable { case main }
+
+    private lazy var dataSource = UITableViewDiffableDataSource<Section, Restaurant>(
+        tableView: tableView
+    ) { tableView, indexPath, restaurant in
+        let cell = tableView.dequeueReusableCell(withIdentifier: RestaurantCell.reuseIdentifier,
+                                                 for: indexPath) as! RestaurantCell
+        cell.configure(with: restaurant)
+        return cell
+    }
+
     private let tableView = UITableView(frame: .zero, style: .plain)
     private let spinner = UIActivityIndicatorView(style: .large)
 
@@ -34,7 +45,7 @@ final class RestaurantListViewController: UIViewController {
 
     private func setUpTableView() {
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.dataSource = self
+        tableView.dataSource = dataSource
         tableView.delegate = self
         tableView.register(RestaurantCell.self, forCellReuseIdentifier: RestaurantCell.reuseIdentifier)
         tableView.rowHeight = 88
@@ -66,11 +77,18 @@ final class RestaurantListViewController: UIViewController {
             switch result {
             case .success(let restaurants):
                 self.restaurants = restaurants
-                self.tableView.reloadData()
+                self.applySnapshot()
             case .failure:
                 self.showError()
             }
         }
+    }
+
+    private func applySnapshot(animatingDifferences: Bool = true) {
+        var snapshot = NSDiffableDataSourceSnapshot<Section, Restaurant>()
+        snapshot.appendSections([.main])
+        snapshot.appendItems(restaurants, toSection: .main)
+        dataSource.apply(snapshot, animatingDifferences: animatingDifferences)
     }
 
     private func showError() {
@@ -82,22 +100,11 @@ final class RestaurantListViewController: UIViewController {
     }
 }
 
-extension RestaurantListViewController: UITableViewDataSource, UITableViewDelegate {
-
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        restaurants.count
-    }
-
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: RestaurantCell.reuseIdentifier,
-                                                 for: indexPath) as! RestaurantCell
-        cell.configure(with: restaurants[indexPath.row])
-        return cell
-    }
+extension RestaurantListViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        let restaurant = restaurants[indexPath.row]
+        guard let restaurant = dataSource.itemIdentifier(for: indexPath) else { return }
 
         // The Menu screen is a VIPER module. We ask its router to build it for us.
         let menu = MenuRouter.createModule(restaurant: restaurant, cart: CartStore.shared)

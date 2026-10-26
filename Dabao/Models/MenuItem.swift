@@ -1,7 +1,7 @@
 import Foundation
 
 /// One dish on a restaurant's menu.
-struct MenuItem: Codable, Hashable, Identifiable {
+nonisolated struct MenuItem: Codable, Hashable, Identifiable {
     let id: String
     let name: String
     let description: String

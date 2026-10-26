@@ -1,7 +1,7 @@
 import Foundation
 
 /// A restaurant on Dabao. Loaded from `restaurants.json`.
-struct Restaurant: Codable, Hashable, Identifiable {
+nonisolated struct Restaurant: Codable, Hashable, Identifiable {
     let id: String
     let name: String
     let cuisine: String
