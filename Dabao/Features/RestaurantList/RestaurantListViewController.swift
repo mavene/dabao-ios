@@ -8,6 +8,8 @@ final class RestaurantListViewController: UIViewController {
 
     private let service: RestaurantServicing
     private var restaurants: [Restaurant] = []
+    private var searchText = ""
+    private let searchController = UISearchController(searchResultsController: nil)
 
     private nonisolated enum Section: Hashable, Sendable { case main }
 
@@ -38,9 +40,28 @@ final class RestaurantListViewController: UIViewController {
         navigationController?.navigationBar.prefersLargeTitles = true
         view.backgroundColor = .systemBackground
 
+        setUpSearch()
         setUpTableView()
         setUpSpinner()
         loadRestaurants()
+    }
+
+    private func setUpSearch() {
+        searchController.searchResultsUpdater = self
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchBar.placeholder = "Search name or cuisine"
+        navigationItem.searchController = searchController
+        navigationItem.hidesSearchBarWhenScrolling = false
+        definesPresentationContext = true
+    }
+
+    private var filteredRestaurants: [Restaurant] {
+        let query = searchText.trimmingCharacters(in: .whitespaces)
+        guard !query.isEmpty else { return restaurants }
+        return restaurants.filter {
+            $0.name.localizedCaseInsensitiveContains(query)
+                || $0.cuisine.localizedCaseInsensitiveContains(query)
+        }
     }
 
     private func setUpTableView() {
@@ -87,7 +108,7 @@ final class RestaurantListViewController: UIViewController {
     private func applySnapshot(animatingDifferences: Bool = true) {
         var snapshot = NSDiffableDataSourceSnapshot<Section, Restaurant>()
         snapshot.appendSections([.main])
-        snapshot.appendItems(restaurants, toSection: .main)
+        snapshot.appendItems(filteredRestaurants, toSection: .main)
         dataSource.apply(snapshot, animatingDifferences: animatingDifferences)
     }
 
@@ -97,6 +118,14 @@ final class RestaurantListViewController: UIViewController {
                                       preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default))
         present(alert, animated: true)
+    }
+}
+
+extension RestaurantListViewController: UISearchResultsUpdating {
+
+    func updateSearchResults(for searchController: UISearchController) {
+        searchText = searchController.searchBar.text ?? ""
+        applySnapshot()
     }
 }
 
