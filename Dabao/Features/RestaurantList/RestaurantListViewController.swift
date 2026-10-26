@@ -9,6 +9,8 @@ final class RestaurantListViewController: UIViewController {
     private let service: RestaurantServicing
     private var restaurants: [Restaurant] = []
     private var searchText = ""
+    private var showsOpenOnly = false
+    private var sortsByRating = false
     private let searchController = UISearchController(searchResultsController: nil)
 
     private nonisolated enum Section: Hashable, Sendable { case main }
@@ -41,6 +43,7 @@ final class RestaurantListViewController: UIViewController {
         view.backgroundColor = .systemBackground
 
         setUpSearch()
+        setUpFilterMenu()
         setUpTableView()
         setUpSpinner()
         loadRestaurants()
@@ -55,13 +58,46 @@ final class RestaurantListViewController: UIViewController {
         definesPresentationContext = true
     }
 
+    private func setUpFilterMenu() {
+        let openNow = UIAction(title: "Open now",
+                               image: UIImage(systemName: "clock"),
+                               state: showsOpenOnly ? .on : .off) { [weak self] _ in
+            guard let self else { return }
+            self.showsOpenOnly.toggle()
+            self.filterOptionsChanged()
+        }
+        let byRating = UIAction(title: "Sort by rating",
+                                image: UIImage(systemName: "star"),
+                                state: sortsByRating ? .on : .off) { [weak self] _ in
+            guard let self else { return }
+            self.sortsByRating.toggle()
+            self.filterOptionsChanged()
+        }
+        let isActive = showsOpenOnly || sortsByRating
+        let icon = isActive ? "line.3.horizontal.decrease.circle.fill" : "line.3.horizontal.decrease.circle"
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            image: UIImage(systemName: icon),
+            menu: UIMenu(children: [openNow, byRating])
+        )
+    }
+
+    private func filterOptionsChanged() {
+        setUpFilterMenu()
+        applySnapshot()
+    }
+
     private var filteredRestaurants: [Restaurant] {
         let query = searchText.trimmingCharacters(in: .whitespaces)
-        guard !query.isEmpty else { return restaurants }
-        return restaurants.filter {
-            $0.name.localizedCaseInsensitiveContains(query)
-                || $0.cuisine.localizedCaseInsensitiveContains(query)
+        var result = restaurants.filter { restaurant in
+            (!showsOpenOnly || restaurant.isOpen)
+                && (query.isEmpty
+                    || restaurant.name.localizedCaseInsensitiveContains(query)
+                    || restaurant.cuisine.localizedCaseInsensitiveContains(query))
         }
+        if sortsByRating {
+            result.sort { $0.rating > $1.rating }
+        }
+        return result
     }
 
     private func setUpTableView() {
