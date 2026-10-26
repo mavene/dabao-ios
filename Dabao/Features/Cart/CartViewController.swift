@@ -129,7 +129,9 @@ extension CartViewController: UITableViewDataSource, UITableViewDelegate {
                 content.secondaryText = PriceFormatter.string(from: cart.subtotal)
             case 1:
                 content.text = "Delivery"
-                content.secondaryText = PriceFormatter.string(from: cart.deliveryFee)
+                content.secondaryText = cart.hasFreeDelivery
+                    ? "Free (wheel reward)"
+                    : PriceFormatter.string(from: cart.deliveryFee)
             default:
                 content.text = "Total"
                 content.secondaryText = PriceFormatter.string(from: cart.total)

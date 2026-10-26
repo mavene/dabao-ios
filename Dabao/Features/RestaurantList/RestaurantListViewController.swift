@@ -75,10 +75,31 @@ final class RestaurantListViewController: UIViewController {
         }
         let isActive = showsOpenOnly || sortsByRating
         let icon = isActive ? "line.3.horizontal.decrease.circle.fill" : "line.3.horizontal.decrease.circle"
-        navigationItem.rightBarButtonItem = UIBarButtonItem(
+        let filterItem = UIBarButtonItem(
             image: UIImage(systemName: icon),
             menu: UIMenu(children: [openNow, byRating])
         )
+        let wheelItem = UIBarButtonItem(image: UIImage(systemName: "die.face.5"),
+                                        primaryAction: UIAction { [weak self] _ in self?.showWheel() })
+        wheelItem.accessibilityLabel = "What should I eat?"
+        navigationItem.rightBarButtonItems = [filterItem, wheelItem]
+    }
+
+    private func showWheel() {
+        let wheel = WheelViewController(restaurants: restaurants)
+        wheel.onOrder = { [weak self] restaurant in
+            CartStore.shared.grantFreeDelivery(for: restaurant)
+            self?.openMenu(for: restaurant)
+        }
+        let nav = UINavigationController(rootViewController: wheel)
+        nav.sheetPresentationController?.detents = [.large()]
+        present(nav, animated: true)
+    }
+
+    private func openMenu(for restaurant: Restaurant) {
+        // The Menu screen is a VIPER module. We ask its router to build it for us.
+        let menu = MenuRouter.createModule(restaurant: restaurant, cart: CartStore.shared)
+        navigationController?.pushViewController(menu, animated: true)
     }
 
     private func filterOptionsChanged() {
@@ -170,9 +191,6 @@ extension RestaurantListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         guard let restaurant = dataSource.itemIdentifier(for: indexPath) else { return }
-
-        // The Menu screen is a VIPER module. We ask its router to build it for us.
-        let menu = MenuRouter.createModule(restaurant: restaurant, cart: CartStore.shared)
-        navigationController?.pushViewController(menu, animated: true)
+        openMenu(for: restaurant)
     }
 }
