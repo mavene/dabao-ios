@@ -16,6 +16,9 @@ final class CartStore {
     private(set) var restaurant: Restaurant?
     private(set) var lines: [CartLine] = []
 
+    /// Set by the wheel: delivery is free while ordering from this restaurant.
+    private(set) var freeDeliveryRestaurantID: String?
+
     var itemCount: Int {
         lines.reduce(0) { $0 + $1.quantity }
     }
@@ -25,7 +28,17 @@ final class CartStore {
     }
 
     var deliveryFee: Decimal {
-        restaurant?.deliveryFee ?? 0
+        guard let restaurant, restaurant.id != freeDeliveryRestaurantID else { return 0 }
+        return restaurant.deliveryFee
+    }
+
+    var hasFreeDelivery: Bool {
+        restaurant != nil && restaurant?.id == freeDeliveryRestaurantID
+    }
+
+    func grantFreeDelivery(for restaurant: Restaurant) {
+        freeDeliveryRestaurantID = restaurant.id
+        notifyChange()
     }
 
     var total: Decimal {
@@ -80,6 +93,7 @@ final class CartStore {
     func clear() {
         lines.removeAll()
         restaurant = nil
+        freeDeliveryRestaurantID = nil
         notifyChange()
     }
 
