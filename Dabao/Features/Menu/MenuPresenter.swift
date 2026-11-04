@@ -6,6 +6,7 @@ import Foundation
 @MainActor
 final class MenuPresenter: MenuPresenterProtocol, MenuInteractorOutputProtocol {
 
+    // MARK: Exercise 2 - this is marked weak because the view already holds a strong reference to the presenter so we need to break this retain cycle
     weak var view: MenuViewProtocol?
     private let interactor: MenuInteractorInputProtocol
     private let router: MenuRouterProtocol
@@ -107,7 +108,7 @@ final class MenuPresenter: MenuPresenterProtocol, MenuInteractorOutputProtocol {
     }
 
     func makeRow(for item: MenuItem) -> MenuItemViewModel {
-        let quantity = quantities[item.name] ?? 0
+        let quantity = quantities[item.id] ?? 0 // MARK: bug found, was previously item.name
         return MenuItemViewModel(
             id: item.id,
             name: item.name,

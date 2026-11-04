@@ -9,6 +9,7 @@ final class MenuPresenterTests: XCTestCase {
 
     // MARK: Fakes
 
+    // MARK: Exercise 5 - we need to use fake view, interactor and router to test the Menu Presenter
     final class FakeView: MenuViewProtocol {
         var shownSections: [MenuSectionViewModel] = []
         var reloadedRows: [MenuItemViewModel] = []

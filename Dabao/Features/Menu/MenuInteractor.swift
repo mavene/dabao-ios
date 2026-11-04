@@ -44,13 +44,17 @@ final class MenuInteractor: MenuInteractorInputProtocol {
             return
         }
 
+        // MARK: Exercise 3 - need to change cart store's max quantity per item, no the view does not need to be updated because didFailToAdd in Presenter will automatically raise the right message to display in view (.limitReached) case
         // Rule: at most `maxQuantityPerItem` of any one dish.
         if cart.quantity(of: item) >= CartStore.maxQuantityPerItem {
             output?.didFailToAdd(item, reason: .limitReached(CartStore.maxQuantityPerItem))
             return
         }
+        
+        // MARK: Exercise 4 - the business logic should still be in the interactor and also raise the message similar to how limit reached is done per item -> add .cartFull error case in didFailToAdd etc. 
 
         cart.add(item, from: restaurant)
+        // MARK: Exercise 1 - the interactor sends back to the presenter a cart summary defined in the menu contracts
         output?.didUpdateCart(currentSummary())
     }
 
