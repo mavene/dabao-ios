@@ -92,6 +92,13 @@ final class MenuPresenterTests: XCTestCase {
         XCTAssertEqual(view.reloadedRows.last?.quantityText, "×2")
     }
 
-    // TODO (Day 14): write a test that checks the "sold out" message appears
-    // when the interactor reports `.soldOut`.
+    // MARK: TODO (Day 14) - the "sold out" message appears when the interactor reports `.soldOut`. (DONE)
+    func test_soldOutFailure_showsSoldOutMessage() {
+        let view = FakeView()
+        let presenter = MenuPresenter(view: view, interactor: FakeInteractor(), router: FakeRouter())
+
+        presenter.didFailToAdd(rice, reason: .soldOut)
+
+        XCTAssertEqual(view.messages, ["Sold out"])
+    }
 }
