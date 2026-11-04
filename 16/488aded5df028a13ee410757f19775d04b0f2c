@@ -1,0 +1,27 @@
+Dabao/Features/RestaurantInfo/RestaurantInfoPresenter.swift
+  s_18f52d6bfd4411::t_0cdc4d8547a9d1 27
+  s_18f52d6bfd4411::t_119607cc0625a1 28-29,38-49
+  s_18f52d6bfd4411::t_6b47fe5c9b6d11 35-37
+DabaoTests/MenuPresenterTests.swift
+  s_18f52d6bfd4411::t_cad6461760cfa8 95-103
+Dabao/Features/RestaurantInfo/RestaurantInfoInteractor.swift
+  s_18f52d6bfd4411::t_464d270c2f82c0 17-27
+  s_18f52d6bfd4411::t_0cdc4d8547a9d1 28
+  s_18f52d6bfd4411::t_2ad2472125127e 16
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.15",
+  "base_commit_sha": "16488aded5df028a13ee410757f19775d04b0f2c",
+  "prompts": {},
+  "sessions": {
+    "s_18f52d6bfd4411": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d13afe36-3aa6-46c8-ae2d-4b142515c21f",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Dian Maisara <dian.maisara@foodpanda.com>"
+    }
+  }
+}
