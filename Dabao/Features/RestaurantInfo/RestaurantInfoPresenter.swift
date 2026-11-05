@@ -15,6 +15,10 @@ final class RestaurantInfoPresenter: RestaurantInfoPresenterProtocol, Restaurant
         self.router = router
     }
 
+    // Opt out of the main-actor deinit hop, which crashes in the back-deployed
+    // runtime shim (deployment target < iOS 18.4).
+    nonisolated deinit {}
+
     func viewDidLoad() {
         interactor.loadFacts()
     }

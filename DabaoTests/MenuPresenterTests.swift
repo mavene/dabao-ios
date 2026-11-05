@@ -101,4 +101,13 @@ final class MenuPresenterTests: XCTestCase {
 
         XCTAssertEqual(view.messages, ["Sold out"])
     }
+    
+    func test_closedRestaurant_showsClosedMessage() {
+        let view = FakeView()
+        let presenter = MenuPresenter(view: view, interactor: FakeInteractor(), router: FakeRouter())
+
+        presenter.didFailToAdd(rice, reason: .restaurantClosed)
+
+        XCTAssertEqual(view.messages, ["Closed now"])
+    }
 }
