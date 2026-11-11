@@ -1,0 +1,16 @@
+Dabao.xcodeproj/project.xcworkspace/contents.xcworkspacedata
+  h_66365dbbad392b 1-7
+DabaoUITests/DabaoUITests.swift
+  h_66365dbbad392b 1-18
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "852fd1ce68d117e72d2bc1d182632f1dad116021",
+  "prompts": {},
+  "humans": {
+    "h_66365dbbad392b": {
+      "author": "Dian Maisara <dian.maisara@foodpanda.com>"
+    }
+  }
+}
