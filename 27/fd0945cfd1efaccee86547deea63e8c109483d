@@ -1,0 +1,41 @@
+Dabao/Features/RestaurantList/RestaurantCell.swift
+  s_048060baa61bf8::t_c8ba947124dddb 14,16,19-20,25-28,33-35,76-79,100,102-104,108-109,114-115,121-123,129-131,133,137-138,155-157,159,165,173
+  s_048060baa61bf8::t_edea6885518c34 15,84-88,90,127-128,134-135,143-147,158
+  s_048060baa61bf8::t_56702085190f43 22,136,142,153,207-212
+  s_048060baa61bf8::t_35e78c48735e62 21,23-24,43,105-107,124-126,139-141,148-152,154,160-164
+  s_048060baa61bf8::t_edaa83c4700bc9 13,67-75,95,118,120,194-195,199-206,213
+  s_048060baa61bf8::t_3fc827598287cd 17,36-42,183-184,187,192-193,196-197,214
+  s_048060baa61bf8::t_252fdc9e4d6a97 198
+  s_048060baa61bf8::t_acad92eb9e5e98 11,57-66,119,185-186,188-191
+  s_048060baa61bf8::t_e666cc319379b6 18,174
+Dabao/Features/Cart/CartViewController.swift
+  s_048060baa61bf8::t_acad92eb9e5e98 69,78
+Dabao/Features/Menu/MenuItemCell.swift
+  s_048060baa61bf8::t_80ca459d8fa46a 17-21,26-28,55-58,71-72,86-90,92-111
+  s_048060baa61bf8::t_acad92eb9e5e98 42-44,46-49,53,116-119
+Dabao/Features/RestaurantList/RestaurantListViewController.swift
+  s_048060baa61bf8::t_acad92eb9e5e98 108-109
+Dabao/Features/Menu/MenuViewController.swift
+  s_048060baa61bf8::t_acad92eb9e5e98 47-52,54-56,68,116,120-129
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "27fd0945cfd1efaccee86547deea63e8c109483d",
+  "prompts": {},
+  "humans": {
+    "h_66365dbbad392b": {
+      "author": "Dian Maisara <dian.maisara@foodpanda.com>"
+    }
+  },
+  "sessions": {
+    "s_048060baa61bf8": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "276b38f9-c786-4ff8-acf1-3a2c393bac2f",
+        "model": "claude-sonnet-5-5"
+      },
+      "human_author": "Dian Maisara <dian.maisara@foodpanda.com>"
+    }
+  }
+}
