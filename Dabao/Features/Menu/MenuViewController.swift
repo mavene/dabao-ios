@@ -44,7 +44,16 @@ final class MenuViewController: UIViewController {
         var config = UIButton.Configuration.filled()
         config.cornerStyle = .capsule
         config.baseBackgroundColor = UIColor(named: "AccentColor")
+        config.titleLineBreakMode = .byWordWrapping
+        config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { attrs in
+            var attrs = attrs
+            attrs.font = UIFont.preferredFont(forTextStyle: .body)
+            return attrs
+        }
         cartBar.configuration = config
+        cartBar.titleLabel?.numberOfLines = 0
+        cartBar.titleLabel?.textAlignment = .center
+        cartBar.titleLabel?.adjustsFontForContentSizeCategory = true
         cartBar.translatesAutoresizingMaskIntoConstraints = false
         cartBar.isHidden = true
         cartBar.addAction(UIAction { [weak self] _ in
@@ -56,7 +65,7 @@ final class MenuViewController: UIViewController {
             cartBar.leadingAnchor.constraint(equalTo: view.layoutMarginsGuide.leadingAnchor),
             cartBar.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor),
             cartBar.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -12),
-            cartBar.heightAnchor.constraint(equalToConstant: 50)
+            cartBar.heightAnchor.constraint(greaterThanOrEqualToConstant: 50)
         ])
     }
 
@@ -104,9 +113,20 @@ extension MenuViewController: MenuViewProtocol {
     func reloadRow(_ row: MenuItemViewModel) {
         guard let indexPath = indexPath(forItemID: row.id) else { return }
         var rows = sections[indexPath.section].rows
+        let previous = rows[indexPath.row]
         rows[indexPath.row] = row
         sections[indexPath.section] = MenuSectionViewModel(title: sections[indexPath.section].title, rows: rows)
         tableView.reloadRows(at: [indexPath], with: .none)
+
+        let announcement: String
+        if let quantity = row.quantityText?.replacingOccurrences(of: "×", with: "") {
+            announcement = previous.quantityText == nil
+                ? "\(row.name) added to cart. Quantity \(quantity)"
+                : "\(row.name), quantity \(quantity)"
+        } else {
+            announcement = "\(row.name) removed from cart"
+        }
+        UIAccessibility.post(notification: .announcement, argument: announcement)
     }
 
     func showCartBar(title: String?) {
