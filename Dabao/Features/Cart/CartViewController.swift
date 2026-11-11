@@ -66,6 +66,7 @@ final class CartViewController: UIViewController {
         config.cornerStyle = .capsule
         config.baseBackgroundColor = UIColor(named: "AccentColor")
         config.title = "Place order"
+        config.titleLineBreakMode = .byWordWrapping
         checkoutButton.configuration = config
         checkoutButton.translatesAutoresizingMaskIntoConstraints = false
         checkoutButton.addAction(UIAction { [weak self] _ in self?.placeOrder() }, for: .touchUpInside)
@@ -74,7 +75,7 @@ final class CartViewController: UIViewController {
             checkoutButton.leadingAnchor.constraint(equalTo: view.layoutMarginsGuide.leadingAnchor),
             checkoutButton.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor),
             checkoutButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -12),
-            checkoutButton.heightAnchor.constraint(equalToConstant: 50)
+            checkoutButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 50)
         ])
         tableView.contentInset.bottom = 74
     }

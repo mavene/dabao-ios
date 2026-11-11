@@ -126,7 +126,8 @@ final class RestaurantListViewController: UIViewController {
         tableView.dataSource = dataSource
         tableView.delegate = self
         tableView.register(RestaurantCell.self, forCellReuseIdentifier: RestaurantCell.reuseIdentifier)
-        tableView.rowHeight = 88
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.estimatedRowHeight = 88
         view.addSubview(tableView)
 
         NSLayoutConstraint.activate([
